@@ -356,8 +356,8 @@ def meus_agendamentos():
         agendamentos = '''
         SELECT * FROM agendamentos
         WHERE usuario_id = %s
-        ORDER BY data_hora ASC
-        LIMIT 6
+        ORDER BY data_hora DESC
+        LIMIT 5
         '''
         resultado = db.obter_dados(agendamentos, (id_usuario,))
         for ag in resultado:
@@ -379,6 +379,27 @@ def meus_agendamentos():
             ag['tempo_formatado'] = tempo_formatado
 
         return render_template('meus-agendamentos.html', agendamento = resultado)
+
+    except Exception as erro:
+        return jsonify({'erro': str(erro)})
+
+@main_routes.route('/cancelar-agendamento', methods=['POST'])
+def cancelar_agendamento():
+    try:
+        usuario_id = session.get('usuario_id')
+        id_cancelamento = request.get_json()
+
+        agendamento_id = 'SELECT * FROM agendamentos WHERE id = %s'
+        hora_agendamento = '''
+        SELECT data_hora
+        FROM agendamentos
+        WHERE id = %s
+        '''
+        resultado = db.obter_dados(hora_agendamento, (id_cancelamento,))
+
+
+
+
 
     except Exception as erro:
         return jsonify({'erro': str(erro)})
