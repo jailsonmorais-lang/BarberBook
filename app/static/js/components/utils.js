@@ -1,6 +1,6 @@
 /* REGEX GLOBAIS */
-const regexNome = /^[A-Za-zÀ-ÿ\s]{3,70}$/;
-const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+const regexNome = /^[A-Za-zÀ-ÿ\s]+$/
 
 /* FUNÇÃO QUE MOSTRA MENSAGENS DE ERROS COM ESTILIZAÇÃO */
 function mostrarMensagem(elemento, texto) {

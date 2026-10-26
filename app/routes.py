@@ -128,7 +128,7 @@ def pagina_cadastro():
             senha_hash = bcrypt.hashpw(senha_bytes, bcrypt.gensalt())
 
             sql_guardar_dados = """
-            INSERT INTO usuarios (nome, email, senha, whatsapp)
+            INSERT INTO usuarios (nome_completo, email, senha, whatsapp)
             VALUES (%s, %s, %s, %s)
             """
             valores = (

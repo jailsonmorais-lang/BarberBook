@@ -36,6 +36,12 @@ if (btnCadastrar) {
         
         } else if (!/[0-9]/.test(senhaCadastro.value)) {
             mostrarMensagem(respostaCadastro, 'Senha deve conter pelo menos um número!')
+        
+        } else if (!/[!@#$%^&*(),.?":{}|<>_]/.test(senhaCadastro.value)) {
+            mostrarMensagem(respostaCadastro, 'Senha deve conter pelo menos um caractere especial!')
+        
+        } else if (/\s/.test(senhaCadastro.value)) {
+            mostrarMensagem(respostaCadastro, 'Senha não pode conter espaços!') 
 
         } else if (senhaConfirmar.value !== senhaCadastro.value) {
             mostrarMensagem(respostaCadastro, 'As senhas não coincidem!')
