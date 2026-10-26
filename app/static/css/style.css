@@ -308,6 +308,7 @@ button {
 }
 
 .regras-senha {
+    font-size: 0.65rem;
     opacity: 0;
     max-height: 0;
     overflow: hidden;
@@ -1521,6 +1522,8 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
     padding: 0.2rem 0.6rem;
     border-radius: 20px;
     font-weight: 600;
+    background: rgba(29, 158, 177, 0.2);
+    color: #1D9E75;
 }
 
 .status-confirmado {

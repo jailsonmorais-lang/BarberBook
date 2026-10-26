@@ -128,7 +128,7 @@ def pagina_cadastro():
             senha_hash = bcrypt.hashpw(senha_bytes, bcrypt.gensalt())
 
             sql_guardar_dados = """
-            INSERT INTO usuarios (nome_completo, email, senha, whatsapp)
+            INSERT INTO usuarios (nome, email, senha, whatsapp)
             VALUES (%s, %s, %s, %s)
             """
             valores = (
@@ -362,7 +362,7 @@ def meus_agendamentos():
         resultado = db.obter_dados(agendamentos, (id_usuario,))
         for ag in resultado:
             fim = ag['data_hora'] + ag['tempo_corte']
-            if datetime.now() > fim:
+            if datetime.now() < fim:
                 ag['status_calculado'] = 'concluido'
             else:
                 ag['status_calculado'] = ag['status']
