@@ -395,19 +395,24 @@ def cancelar_agendamento():
         print('Seu agendamento é ',agendamento_id)
 
         hora_agendamento = '''
-        SELECT data_hora
+        SELECT data_hora, status
         FROM agendamentos
-        WHERE id = %s
+        WHERE id = %s AND usuario_id = %s
         '''
-        resultado = db.obter_dados(hora_agendamento, (dados,))
-        if resultado:
-            return jsonify({'mensagem': 'Seu id', 'id': agendamento_id}), 200
-        else:
-            return({'erro': 'Falha ao cancelar!'}), 400
+        resultado = db.obter_dados(hora_agendamento, (agendamento_id, usuario_id,))
+        
+        if not resultado:
+            return jsonify({'erro': 'Agendamento não encontrado'}), 404
+        
+        status = resultado[0]['status']
+        data_hora = resultado[0]['data_hora']
+        print(status, data_hora)
 
+        if status != 'pendente':
+            return jsonify({'erro': 'Este agendamento não pode mais ser cancelado!'}), 400
 
-
-
+        
+        return jsonify({'mensagem': 'teste'}), 200
 
     except Exception as erro:
         return jsonify({'erro': str(erro)})
