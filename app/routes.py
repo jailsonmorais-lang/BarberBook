@@ -364,9 +364,9 @@ def meus_agendamentos():
         for ag in resultado:
             fim = ag['data_hora'] + ag['tempo_corte']
             if agora < ag['data_hora']:
-                ag['status_calculado'] = ag['status']
+                ag['status_calculado'] = 'pendente'
             elif agora < fim:
-                ag['status_calculado'] = 'em atendimento'
+                ag['status_calculado'] = 'atendimento'
             else:
                 ag['status_calculado'] = 'concluido'
             
@@ -390,15 +390,20 @@ def meus_agendamentos():
 def cancelar_agendamento():
     try:
         usuario_id = session.get('usuario_id')
-        id_cancelamento = request.get_json()
+        dados = request.get_json()
+        agendamento_id = dados['id']
+        print('Seu agendamento é ',agendamento_id)
 
-        agendamento_id = 'SELECT * FROM agendamentos WHERE id = %s'
         hora_agendamento = '''
         SELECT data_hora
         FROM agendamentos
         WHERE id = %s
         '''
-        resultado = db.obter_dados(hora_agendamento, (id_cancelamento,))
+        resultado = db.obter_dados(hora_agendamento, (dados,))
+        if resultado:
+            return jsonify({'mensagem': 'Seu id', 'id': agendamento_id}), 200
+        else:
+            return({'erro': 'Falha ao cancelar!'}), 400
 
 
 
