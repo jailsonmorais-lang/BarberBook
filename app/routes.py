@@ -360,12 +360,15 @@ def meus_agendamentos():
         LIMIT 5
         '''
         resultado = db.obter_dados(agendamentos, (id_usuario,))
+        agora = datetime.now()
         for ag in resultado:
             fim = ag['data_hora'] + ag['tempo_corte']
-            if datetime.now() < fim:
-                ag['status_calculado'] = 'concluido'
-            else:
+            if agora < ag['data_hora']:
                 ag['status_calculado'] = ag['status']
+            elif agora < fim:
+                ag['status_calculado'] = 'em atendimento'
+            else:
+                ag['status_calculado'] = 'concluido'
             
             total = int(ag['tempo_corte'].total_seconds())
             horas = total // 3600

@@ -49,9 +49,9 @@
             </div>
             {% endif %}
 
-            {% if ag.status_calculado == 'confirmado' %}
+            {% if ag.status_calculado == 'pendente' %}
             <div class="card-acoes">
-                <button id="btn-cancelar" data-id="{{ ag.id }}">
+                <button class="btn-cancelar" data-id="{{ ag.id }}">
                     Cancelar Agendamento
                 </button>
             </div>

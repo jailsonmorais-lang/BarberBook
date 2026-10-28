@@ -1574,7 +1574,7 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
     margin-top: 1rem;
 }
 
-#btn-cancelar {
+.btn-cancelar {
     width: 100%;
     padding: 0.75rem;
     background: rgba(226, 75, 74, 0.1);
@@ -1587,7 +1587,7 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
     transition: background 0.2s;
 }
 
-#btn-cancelar:hover {
+.btn-cancelar:hover {
     background: rgba(266, 75, 74, 0.2);
 }
 
