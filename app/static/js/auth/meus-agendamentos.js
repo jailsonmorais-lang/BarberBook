@@ -31,6 +31,9 @@ if (botoes.length > 0) {
                         mostrarMensagem(cancelamento, dado.erro)
                     } else {
                         mostrarMensagem(cancelamento, dado.mensagem)
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 2000)
                     }
                 })
         })

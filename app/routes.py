@@ -284,11 +284,12 @@ def pagina_agendamentos():
             horas = minutos // 60
             minutos_restantes = minutos % 60
             tempo_formatado = f'{horas:02d}:{minutos_restantes:02d}:00'
+            '''fim_corte = data_hora + timedelta(minutes=minutos)'''
 
-            horario_barbeiro = 'SELECT * FROM agendamentos WHERE barbeiro = %s AND %s < DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND) AND %s >= data_hora'
+            horario_barbeiro = "SELECT * FROM agendamentos WHERE barbeiro = %s AND status <> 'cancelado' AND %s < DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND) AND %s >= data_hora"
             resultado = db.obter_dados(horario_barbeiro, (dados_agendamento['barbeiro'], data_hora, data_hora,))
             if resultado:
-                return jsonify({'erro': 'Horário ocupado'}), 401
+                return jsonify({'erro': 'Horário ocupado'}), 409
             else:
                 sql_agendar = """
                 INSERT INTO agendamentos(usuario_id, nome_cliente, whatsapp, corte_nome, corte_descricao, tempo_corte, corte_preco, barbeiro, data_hora, observacao)
@@ -363,7 +364,9 @@ def meus_agendamentos():
         agora = datetime.now()
         for ag in resultado:
             fim = ag['data_hora'] + ag['tempo_corte']
-            if agora < ag['data_hora']:
+            if ag['status'] == 'cancelado':
+                ag['status_calculado'] = 'cancelado'
+            elif agora < ag['data_hora']:
                 ag['status_calculado'] = 'pendente'
             elif agora < fim:
                 ag['status_calculado'] = 'atendimento'
@@ -389,10 +392,11 @@ def meus_agendamentos():
 @main_routes.route('/cancelar-agendamento', methods=['POST'])
 def cancelar_agendamento():
     try:
+        PRAZO_CANCELAMENTO = timedelta(minutes=0)
         usuario_id = session.get('usuario_id')
         dados = request.get_json()
         agendamento_id = dados['id']
-        print('Seu agendamento é ',agendamento_id)
+        print('logado:', usuario_id, '| agendamento:', agendamento_id)
 
         hora_agendamento = '''
         SELECT data_hora, status
@@ -404,16 +408,24 @@ def cancelar_agendamento():
         if not resultado:
             return jsonify({'erro': 'Agendamento não encontrado'}), 404
         
+        
         status = resultado[0]['status']
         data_hora = resultado[0]['data_hora']
         print(status, data_hora)
-
-        if status != 'pendente':
+        agora = datetime.now()
+        if agora >= data_hora - PRAZO_CANCELAMENTO or status != 'pendente':
             return jsonify({'erro': 'Este agendamento não pode mais ser cancelado!'}), 400
 
-        
-        return jsonify({'mensagem': 'teste'}), 200
+        sql_guardar_dados = """
+        UPDATE agendamentos
+        SET status = 'cancelado'
+        WHERE id = %s AND usuario_id = %s
+        """
+        resultado_sql = db.executar_query(sql_guardar_dados, (agendamento_id, usuario_id))
 
+        if resultado_sql:
+            return jsonify({'mensagem': 'Agendamento cancelado com sucesso!'})
+        
     except Exception as erro:
         return jsonify({'erro': str(erro)})
 

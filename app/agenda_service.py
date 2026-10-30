@@ -7,7 +7,7 @@ config_dias = {
     2: ("08:00", "18:00", 30),  # Quarta
     3: ("08:00", "18:00", 30),  # Quinta
     4: ("08:00", "18:00", 30),  # Sexta
-    5: ("09:00", "13:00", 60),  # Sábado (Horário reduzido)
+    5: ("09:00", "13:00", 30),  # Sábado (Horário reduzido)
     6: None                     # Domingo (Fechado)
 }
 
@@ -32,16 +32,9 @@ def gerar_grade_horarios(data_alvo):
     return grade
 
 
-"""
-hoje = datetime.now()
-horarios_hoje = gerar_grade_horarios(hoje)
-print(f'Agenda para {hoje.strftime('%d/%m (%A)')}:')
-print(horarios_hoje)
-"""
-
 
 def buscar_horarios_ocupados(barbeiro, data):
-    consultar = 'SELECT data_hora, tempo_corte FROM agendamentos WHERE barbeiro = %s AND DATE(data_hora) = %s'
+    consultar = "SELECT data_hora, tempo_corte FROM agendamentos WHERE barbeiro = %s AND DATE(data_hora) = %s AND status <> 'cancelado'"
     resultado = db.obter_dados(consultar, (barbeiro, data,))
     print('Ocupados: ', resultado)
     return resultado
