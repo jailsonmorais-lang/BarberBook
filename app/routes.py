@@ -284,10 +284,14 @@ def pagina_agendamentos():
             horas = minutos // 60
             minutos_restantes = minutos % 60
             tempo_formatado = f'{horas:02d}:{minutos_restantes:02d}:00'
-            '''fim_corte = data_hora + timedelta(minutes=minutos)'''
+            fim_corte = data_hora + timedelta(minutes=minutos)
 
-            horario_barbeiro = "SELECT * FROM agendamentos WHERE barbeiro = %s AND status <> 'cancelado' AND %s < DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND) AND %s >= data_hora"
-            resultado = db.obter_dados(horario_barbeiro, (dados_agendamento['barbeiro'], data_hora, data_hora,))
+            horario_barbeiro = "SELECT * FROM agendamentos " \
+            "WHERE barbeiro = %s " \
+            "AND status <> 'cancelado' " \
+            "AND %s < DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND) " \
+            "AND %s > data_hora"
+            resultado = db.obter_dados(horario_barbeiro, (dados_agendamento['barbeiro'], data_hora, fim_corte,))
             if resultado:
                 return jsonify({'erro': 'Horário ocupado'}), 409
             else:

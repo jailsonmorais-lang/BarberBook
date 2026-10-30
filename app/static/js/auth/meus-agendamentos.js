@@ -12,13 +12,16 @@ document.querySelector('button.btn-voltar').addEventListener('click', (evento) =
 })
 // 1. Seleciona todos os botões
 const botoes = document.querySelectorAll('.btn-cancelar')
-const cancelamento = document.querySelector('div.cancelamento')
 // 2. Percorre cada um
 if (botoes.length > 0) {
     botoes.forEach(btn => {
         btn.addEventListener('click', () => {
             // 3. Pega o data-id
             const id = btn.getAttribute('data-id')
+            const card = btn.closest('.card-agendamento')
+            const cancelamento = card.querySelector('.cancelamento')
+            btn.disabled = true
+            
             // 4. Envia para o Flask via fetch
             fetch('/cancelar-agendamento', {
                 method: 'POST',
