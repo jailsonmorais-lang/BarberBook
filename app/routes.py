@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, session, redirect
+from flask import Blueprint, abort, render_template, request, jsonify, session, redirect
 from app.models import db
 from app.agenda_service import gerar_grade_horarios
 import bcrypt
@@ -344,11 +344,14 @@ def consultar_horarios():
 @main_routes.route('/confirmacao', methods=['GET'])
 def confirmacao():
     try:
-        id_usuario = request.args.get('id')
+        agendamento_id = request.args.get('id')
         id_confirmacao = 'SELECT * FROM agendamentos WHERE id = %s AND usuario_id = %s'
 
-        resultado = db.obter_dados(id_confirmacao, (id_usuario, session.get('usuario_id')))
+        resultado = db.obter_dados(id_confirmacao, (agendamento_id, session.get('usuario_id')))
 
+        if not resultado:
+            return redirect('/meus-agendamentos')
+            
         return render_template('confirmacao.html', agendamento = resultado[0])
     except Exception as erro:
         return jsonify({'erro': str(erro)})
@@ -357,6 +360,9 @@ def confirmacao():
 def meus_agendamentos():
     try:
         id_usuario = session.get('usuario_id')
+        if not id_usuario:
+            return redirect('/')
+        
         agendamentos = '''
         SELECT * FROM agendamentos
         WHERE usuario_id = %s
@@ -372,6 +378,8 @@ def meus_agendamentos():
             AND DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND ) < NOW()"""
 
         db.executar_query(sql)
+
+
         for ag in resultado:
             fim = ag['data_hora'] + ag['tempo_corte']
             if ag['status'] == 'cancelado':
@@ -436,7 +444,7 @@ def cancelar_agendamento():
             return jsonify({'mensagem': 'Agendamento cancelado com sucesso!'})
         
     except Exception as erro:
-        return jsonify({'erro': str(erro)})
+        return jsonify({'erro': str(erro)}), 500
 
 @main_routes.route('/footer')
 def pagina_footer():

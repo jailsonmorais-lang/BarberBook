@@ -1398,7 +1398,7 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
 }
 
 .destaque-preco {
-    color: #9b30ff;
+    color: #9b30ff !important;
     font-size: 1.1rem;
     font-weight: 700;
 }
