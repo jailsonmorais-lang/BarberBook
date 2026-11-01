@@ -2,7 +2,6 @@ const cardResumo = document.querySelectorAll('div.card-resumo')
 cardResumo.forEach((cards) => {
     cards.addEventListener('click', () => {
         cards.parentElement.classList.toggle('aberto')
-        console.log('Clicou no card')
     })
 })
 
@@ -38,6 +37,11 @@ if (botoes.length > 0) {
                             window.location.reload()
                         }, 2000)
                     }
+                })
+                .catch(erro => {
+                    console.error('Erro:', erro)
+                    mostrarMensagem(cancelamento, 'Ocorreu um erro ao cancelar o agendamento.')
+                    btn.disabled = false
                 })
         })
     })

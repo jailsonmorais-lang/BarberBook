@@ -68,7 +68,6 @@ def google_login():
 @main_routes.route('/', methods=['GET', 'POST'])
 def pagina_inicial():
     if request.method == 'POST':
-        print("🔍 DEBUG: Login normal foi chamado!")
         try:
             dados_login = request.get_json()
             dados_obrigatorios = ['email', 'senha']
@@ -346,9 +345,9 @@ def consultar_horarios():
 def confirmacao():
     try:
         id_usuario = request.args.get('id')
-        id_confirmacao = 'SELECT * FROM agendamentos WHERE id = %s'
+        id_confirmacao = 'SELECT * FROM agendamentos WHERE id = %s AND usuario_id = %s'
 
-        resultado = db.obter_dados(id_confirmacao, (id_usuario,))
+        resultado = db.obter_dados(id_confirmacao, (id_usuario, session.get('usuario_id')))
 
         return render_template('confirmacao.html', agendamento = resultado[0])
     except Exception as erro:
@@ -361,11 +360,18 @@ def meus_agendamentos():
         agendamentos = '''
         SELECT * FROM agendamentos
         WHERE usuario_id = %s
-        ORDER BY data_hora DESC
-        LIMIT 5
+        AND data_hora >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        ORDER BY (status = 'cancelado' OR DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND) < NOW()), data_hora ASC
         '''
         resultado = db.obter_dados(agendamentos, (id_usuario,))
         agora = datetime.now()
+        sql = """
+            UPDATE agendamentos
+            SET status = 'concluido'
+            WHERE status = 'pendente'
+            AND DATE_ADD(data_hora, INTERVAL tempo_corte HOUR_SECOND ) < NOW()"""
+
+        db.executar_query(sql)
         for ag in resultado:
             fim = ag['data_hora'] + ag['tempo_corte']
             if ag['status'] == 'cancelado':
@@ -376,7 +382,8 @@ def meus_agendamentos():
                 ag['status_calculado'] = 'atendimento'
             else:
                 ag['status_calculado'] = 'concluido'
-            
+
+
             total = int(ag['tempo_corte'].total_seconds())
             horas = total // 3600
             minutos = (total % 3600) // 60
@@ -400,7 +407,6 @@ def cancelar_agendamento():
         usuario_id = session.get('usuario_id')
         dados = request.get_json()
         agendamento_id = dados['id']
-        print('logado:', usuario_id, '| agendamento:', agendamento_id)
 
         hora_agendamento = '''
         SELECT data_hora, status
@@ -415,7 +421,6 @@ def cancelar_agendamento():
         
         status = resultado[0]['status']
         data_hora = resultado[0]['data_hora']
-        print(status, data_hora)
         agora = datetime.now()
         if agora >= data_hora - PRAZO_CANCELAMENTO or status != 'pendente':
             return jsonify({'erro': 'Este agendamento não pode mais ser cancelado!'}), 400

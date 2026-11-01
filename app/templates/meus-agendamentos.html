@@ -9,7 +9,10 @@
     {% endif %}
 
     {% for ag in agendamento %}
-    <div class="card-agendamento">
+    <div class="card-agendamento {{ 'cancelado' if ag.status_calculado == 'cancelado' else '' }}
+    {{ 'pendente' if ag.status_calculado == 'pendente' else '' }}
+    {{ 'concluido' if ag.status_calculado == 'concluido' else '' }}
+    {{ 'atendimento' if ag.status_calculado == 'atendimento' else '' }}">
 
         <div class="card-resumo">
             <div class="resumo-info">

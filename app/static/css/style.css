@@ -1434,10 +1434,14 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .btn-voltar:hover {
     transform: translateY(-2px);
+    transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
 }
 
@@ -1464,9 +1468,12 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
 }
 
 /* CARD */
+/* ===== CARD BASE (neutro) ===== */
 .card-agendamento {
+    --rgb: 138, 43, 226;                 /* cor padrão: roxo da marca */
     background: linear-gradient(145deg, #1A1A2E, #16213E);
-    border: 1px solid rgba(138, 43, 226, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 4px solid rgb(var(--rgb));
     border-radius: 16px;
     margin-bottom: 1rem;
     overflow: hidden;
@@ -1475,7 +1482,36 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
 }
 
 .card-agendamento:hover {
-    box-shadow: 0 4px 30px rgba(138, 43, 226, 0.2);
+    box-shadow: 0 4px 30px rgba(var(--rgb), 0.25);
+}
+
+/* ===== CADA STATUS SÓ TROCA A COR ===== */
+.card-agendamento.pendente    { --rgb: 245, 185, 66; }
+.card-agendamento.atendimento { --rgb: 56, 189, 248; }
+.card-agendamento.concluido   { --rgb: 52, 211, 153; }
+.card-agendamento.cancelado   { --rgb: 248, 113, 113; opacity: 0.8; }
+
+/* leve tom da cor do status por cima do fundo neutro */
+.card-agendamento.pendente,
+.card-agendamento.atendimento,
+.card-agendamento.concluido,
+.card-agendamento.cancelado {
+    background:
+        linear-gradient(145deg, rgba(var(--rgb), 0.08), rgba(var(--rgb), 0.02)),
+        linear-gradient(145deg, #1A1A2E, #16213E);
+}
+
+/* ===== ETIQUETA DE STATUS ===== */
+.resumo-status {
+    color: rgb(var(--rgb));
+    background: rgba(var(--rgb), 0.15);
+    border: 1px solid rgba(var(--rgb), 0.4);
+}
+
+/* ===== PREÇOS NA COR DO STATUS ===== */
+.resumo-preco,
+.destaque-preco {
+    color: rgb(var(--rgb));
 }
 
 /* RESUMO */
@@ -1513,7 +1549,7 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
 }
 
 .resumo-preco {
-    color: #9B30FF;
+    color: rgb(var(--rgb));
     font-weight: 700;
     font-size: 1rem;
 }
@@ -1533,8 +1569,8 @@ div#foto-do-barbeiro-selecionado img.img-barbeiro::before {
 }
 
 .status-concluido {
-    background: rgba(138, 43, 226, 0.2);
-    color: #9B30FF;
+    background: rgba(29, 158, 177, 0.2);
+    color: #1D9E75;
 }
 
 .status-cancelado {
