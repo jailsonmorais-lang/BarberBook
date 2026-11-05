@@ -2,26 +2,65 @@
 
 {% block content %}
     <h1>Painel Administrativo</h1>
-    <a href="/logout" class="logout-button">
-        <button class="button-sair">Sair</button>
+    <a href="/logout" class="painel-sair">
+        Sair
     </a>
-
-    <div class="periodo">
-        <div class="hoje">
+<section>
+    <div class="painel-periodo">
+        <div class="painel-hoje">
             <h2>Hoje</h2>
             <p>{{ agendamentos_hoje }} agendamento(s)</p>
         </div>
     </div>
-    <div class="periodo">
-        <div class="semana">
+    <div class="painel-periodo">
+        <div class="painel-semana">
             <h2>Semana</h2>
             <p>{{ agendamentos_semana }} agendamento(s)</p>
         </div>
     </div>
-    <div class="periodo">
-        <div class="mes">
-            
+    <div class="painel-periodo">
+        <div class="painel-mes">
+            <h2>Mês</h2>
+            <p>{{ agendamentos_mes }} agendamento(s)</p>            
         </div>
+    </div>
+    <div class="painel-periodo">
+        <div class="painel-ano">
+            <h2>Ano</h2>
+            <p>{{ agendamentos_ano }} agendamento(s)</p>
+        </div>
+    </div>
+</section>
+
+    <div class="painel-agenda">
+        <table>
+            <thead>
+                <tr>
+                    <th>Horário</th>
+                    <th>Cliente</th>
+                    <th>Barbeiro</th>W
+                    <th>Serviço</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for agendamento in agendamentos_hoje_list %}
+                    <tr>
+                        <td>{{ agendamento.data_hora.strftime('%H:%M') }}</td>
+                        <td>{{ agendamento.nome_cliente }}</td>
+                        <td>{{ agendamento.barbeiro }}</td>
+                        <td>{{ agendamento.corte_nome }}</td>
+                        <td>{{ "%.2f"|format(agendamento.corte_preco) }}</td>
+                        <td>{{ agendamento.status }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">Nenhum agendamento para hoje.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 

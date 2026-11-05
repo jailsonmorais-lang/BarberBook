@@ -1,5 +1,60 @@
 .painel-container {
     width: 100%;
     max-width: 1100px;
-    color: #fff;
+}
+
+/* ===== OS 4 CARTÕES LADO A LADO ===== */
+.painel-ganhos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.painel-periodo {
+    background: var(--primary-light);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.painel-periodo h2 {
+    color: var(--primary-gold);
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.painel-periodo p {
+    color: var(--text-light);
+}
+
+/* ===== TABELA DA AGENDA ===== */
+.painel-agenda {
+    overflow-x: auto; /* no celular, a tabela rola de lado em vez de estourar a tela */
+}
+
+.painel-agenda table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.painel-agenda th,
+.painel-agenda td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.painel-agenda th {
+    color: var(--primary-gold);
+}
+
+/* ===== LINK SAIR ===== */
+.painel-sair {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid var(--primary-gold);
+    border-radius: 8px;
+    color: var(--primary-gold);
+    text-decoration: none;
 }

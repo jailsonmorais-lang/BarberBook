@@ -467,4 +467,12 @@ def pagina_footer():
 ''' ROTAS ADMINISTRATIVAS '''
 @main_routes.route('/painel', methods=['GET'])
 def painel():
-    return render_template('painel.html')
+    return render_template('painel.html',
+                           agendamentos_hoje=10,
+                           agendamentos_semana=25,
+                           agendamentos_mes=100,
+                           agendamentos_ano=1200,
+                           agendamentos_hoje_list=[
+                               {'data_hora': datetime(2026, 11, 5, 9, 0), 'nome_cliente': 'Ana', 
+                                'barbeiro': 'João', 'corte_preco': 25.0, 'status': 'pendente'},
+            {'data_hora': datetime(2026, 11, 5, 10, 0), 'nome_cliente': 'Beto', 'barbeiro': 'Pedro', 'corte_preco': 30.0, 'status': 'pendente'}],)
