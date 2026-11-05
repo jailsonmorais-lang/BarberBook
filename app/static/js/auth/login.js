@@ -33,7 +33,9 @@ if (btnLogin) {
                         respostaLogin.innerHTML = dados.erro
                     } else {
                         mostrarMensagem(respostaLogin, 'Login realizado com sucesso!')
-                        window.location = '/dashboard'
+                        setTimeout(() => {
+                            window.location = '/dashboard'
+                        }, 2000)
                     }
                 })
         }

@@ -30,7 +30,9 @@ if (btnRedefinirSenha) {
                         mostrarMensagem(respostaCriarNovaSenha, dados.erro)
                     } else {
                         mostrarMensagem(respostaCriarNovaSenha, dados.mensagem)
-                        window.location = '/'
+                        setTimeout(() => {
+                            window.location = '/'
+                        }, 2000)
                     }
                 })
         }

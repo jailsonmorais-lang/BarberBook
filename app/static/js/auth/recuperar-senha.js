@@ -59,7 +59,9 @@ if (btnVerificarCodigo) {
                         mostrarMensagem(respostaRecuperaSenha, dados.erro)
                     } else {
                         mostrarMensagem(respostaRecuperaSenha, dados.mensagem)
-                        window.location = '/criar-senha'
+                        setTimeout(() => {
+                            window.location = '/criar-senha'
+                        }, 2000)
                     }
                 })
         }

@@ -54,11 +54,14 @@ def google_login():
                 'GOOGLE_AUTH',
                 ''
             )
+
             resultado = db.executar_query(sql_guardar_dados, valores)
             session['usuario_id'] = resultado
+            session['usuario_nome'] = nome
             return redirect('/dashboard')
         else:
             session['usuario_id'] = usuario[0]['id']
+            session['usuario_nome'] = usuario[0]['nome']
             return redirect('/dashboard')
 
     except Exception as erro:
@@ -84,12 +87,20 @@ def pagina_inicial():
 
             senha_bytes = dados_login['senha'].encode('utf-8')
             senha_hash_banco = email_nao_cadastrado[0]['senha']
+            
+            if email_nao_cadastrado[0]['senha'] == 'GOOGLE_AUTH':
+                return jsonify({'erro': 'Esta conta foi criada com o Google. Faça login com o Google,'
+                ' ou crie uma nova senha!'}), 401
+            
             senha_correta = bcrypt.checkpw(
                 senha_bytes, senha_hash_banco.encode('utf-8'))
+
+            
             if not senha_correta:
                 return jsonify({'erro': 'Senha incorreta!'}), 401
             else:
                 session['usuario_id'] = email_nao_cadastrado[0]['id']
+                session['usuario_nome'] = email_nao_cadastrado[0]['nome']
                 return jsonify({'mensagem': 'Login realizado com sucesso!'}), 200
 
         except Exception as erro:
@@ -139,6 +150,8 @@ def pagina_cadastro():
             resultado = db.executar_query(sql_guardar_dados, valores)
 
             if resultado:
+                session['usuario_id'] = resultado
+                session['usuario_nome'] = dados_para_cadastro['nome']
                 return jsonify({'mensagem': 'Cadastro concluido com sucesso!'}), 200
             else:
                 return jsonify({'erro': 'Cadastro não finalizado!'}), 500
@@ -449,3 +462,9 @@ def cancelar_agendamento():
 @main_routes.route('/footer')
 def pagina_footer():
     return render_template('footer.html')
+
+
+''' ROTAS ADMINISTRATIVAS '''
+@main_routes.route('/painel', methods=['GET'])
+def painel():
+    return render_template('painel.html')

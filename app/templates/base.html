@@ -14,7 +14,7 @@
 <body>
     <main>
         <div class="container">
-            {% if request.endpoint == 'main.pagina_dashboard' %}
+            {% if request.endpoint in ['main.pagina_dashboard', 'main.meus_agendamentos'] %}
                 {% include 'navbar_dashboard.html' %}
             {% endif %}
 
@@ -22,7 +22,7 @@
 
             {% endblock %}
 
-            {% if request.endpoint == 'main.pagina_dashboard' %}
+            {% if request.endpoint in ['main.pagina_dashboard', 'main.meus_agendamentos'] %}
                 {% include 'footer.html' %}
             {% endif %}
 
@@ -30,8 +30,14 @@
     </main>
 
     <script src="{{ url_for('static', filename='js/components/utils.js') }}" defer></script>
-    
-    {% block scripts %}    {% endblock %}
+
+
+    {% if request.endpoint in ['main.pagina_dashboard', 'main.meus_agendamentos'] %}
+    <script src="{{ url_for('static', filename='js/components/navbar.js') }}"></script>
+    {% endif %}
+
+
+    {% block scripts %} {% endblock %}
 
 </body>
 

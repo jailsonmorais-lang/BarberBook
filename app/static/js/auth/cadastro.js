@@ -72,8 +72,14 @@ if (btnCadastrar) {
                         respostaCadastro.innerHTML = dados.erro
                     } else {
                         respostaCadastro.innerHTML = dados.mensagem
-                        window.location = '/'
+                        setTimeout(() => {
+                            window.location = '/'
+                        }, 2000)
                     }
+                })
+                .catch(erro => {
+                    console.error('Erro:', erro)
+                    respostaCadastro.innerHTML = 'Ocorreu um erro ao cadastrar. Tente novamente mais tarde.'
                 })
         }
     }

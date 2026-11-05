@@ -1,0 +1,30 @@
+{% extends "base_painel.html" %}
+
+{% block content %}
+    <h1>Painel Administrativo</h1>
+    <a href="/logout" class="logout-button">
+        <button class="button-sair">Sair</button>
+    </a>
+
+    <div class="periodo">
+        <div class="hoje">
+            <h2>Hoje</h2>
+            <p>{{ agendamentos_hoje }} agendamento(s)</p>
+        </div>
+    </div>
+    <div class="periodo">
+        <div class="semana">
+            <h2>Semana</h2>
+            <p>{{ agendamentos_semana }} agendamento(s)</p>
+        </div>
+    </div>
+    <div class="periodo">
+        <div class="mes">
+            
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

@@ -1,6 +1,12 @@
 <nav class="navbar">
     <div class="nav-menu">
-        <div class="brand">BarberBook</div>
+        <div class="brand">
+            {% if session.get('usuario_nome') %}
+                {{ 'Seja bem-vindo ' + session['usuario_nome'].split(' ')[0] }}
+            {% else %}
+                BarberBook
+            {% endif %}
+        </div>
 
         <!-- Instagram -->
         <a href="https://www.instagram.com/jheison.morais" class="nav-item" target="_blank">
@@ -66,7 +72,3 @@
         </a>
     </div>
 </nav>
-
-{% block scripts %}
-    <script src="{{ url_for('static', filename='js/components/navbar.js') }}"></script>
-{% endblock %}

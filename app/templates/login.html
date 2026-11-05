@@ -16,14 +16,14 @@
                         <img src="{{ url_for('static', filename='assets/email.svg') }}" alt="email" class="icone"
                             loading="lazy">
                         <input type="email" name="email-login" id="email-login" placeholder="exemplo@exemplo.com"
-                            required>
+                            required autocomplete="email">
                     </div>
                     <label for="password-login" class="label">Senha </label>
                     <div class="logar">
                         <img src="{{ url_for('static', filename='assets/password.svg') }}" alt="Senha-login"
                             class="icone" loading="lazy">
                         <input type="password" name="password-login" id="password-login" placeholder="**********"
-                            required>
+                            required autocomplete="current-password">
                         <button type="button" class="btn-mostrar-senha" id="btn-mostrar-senha-login">
                             <img id="icone-olho-login" src="{{ url_for('static', filename='assets/olho-fechado.svg') }}"
                                 alt="mostrar senha" class="icone" loading="lazy">
